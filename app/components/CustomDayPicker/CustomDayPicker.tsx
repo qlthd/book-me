@@ -34,7 +34,7 @@ export const CustomDayPicker = () => {
                 className="custom-dropdown-root"
                 classNames={{
                     selected: `text-white bg-electric-blue`,
-                    root: `${defaultClassNames.root} bg-light-gray shadow-lg p-5 text-dark-gray`,
+                    root: `${defaultClassNames.root} bg-light-gray shadow-lg p-5 text-dark-gray w-max mx-auto rounded-lg my-4`,
                     day: `group w-10 h-10 rounded-full`,
                     weekday: `text-dark-gray font-semibold`,
                     weekdays: 'my-8',
