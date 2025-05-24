@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import { trpc } from "@/utils/trpc";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { PageLayout } from "../../components/PageLayout/PageLayout";
 import { LoaderCircle } from "lucide-react";
-import toast, {Toaster} from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const Page = () => {
     const params = useParams();
+    const router = useRouter();
     const availabilityId = Array.isArray(params?.availabilityId) ? params.availabilityId[0] : params?.availabilityId;
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({
@@ -20,6 +21,7 @@ const Page = () => {
     const notifySuccess = () => toast.success('Slot successfully booked!');
 
     const handleSubmit = () => {
+        router.push(`/book/${params?.availabilityId}/confirm`);
         const newErrors = { firstName: "", lastName: "", email: "" };
 
         if (!document.getElementById("firstName")?.value) {
@@ -47,7 +49,7 @@ const Page = () => {
 
 
     return (
-        <PageLayout title="Book Slot">
+        <PageLayout title="Book Slot" previousBtn={{ disabled : isSubmitting }}>
             <label htmlFor="firstName" className="w-full text-left mb-1 text-lg font-medium text-dark-gray">
                 First name
             </label>

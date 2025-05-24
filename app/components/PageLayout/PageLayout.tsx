@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export const PageLayout = (props : SkeletonProps) => {
-    const { children, title, className, hidePreviousBtn = false } = props;
+    const { children, title, className, previousBtn = { disabled: false, hidden: false } } = props;
     const router = useRouter();
 
     const handleBack = () => {
@@ -14,8 +14,11 @@ export const PageLayout = (props : SkeletonProps) => {
     return (
         <div className="text-black bg-white shadow-lg rounded-lg m-12 p-6 min-h-40">
             <div className="flex items-center gap-2 mb-4">
-                {!hidePreviousBtn &&
-                    <button className="bg-light-gray rounded-full h-12 w-12 p-2 shadow-sm hover:bg-light-blue" onClick={handleBack}>
+                {!previousBtn.hidden &&
+                    <button
+                        disabled={previousBtn.disabled}
+                        className={`bg-light-gray rounded-full h-12 w-12 p-2 shadow-sm hover:bg-light-blue ${previousBtn.disabled && 'text-gray-500 hover:bg-light-gray'}`}
+                        onClick={handleBack}>
                         <ArrowLeft className="w-6 h-6 mx-auto" />
                     </button>
                 }
