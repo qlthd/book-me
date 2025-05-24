@@ -4,16 +4,20 @@ import React, { useState } from "react";
 import { trpc } from "@/utils/trpc";
 import { useParams } from "next/navigation";
 import { PageLayout } from "../../components/PageLayout/PageLayout";
+import { LoaderCircle } from "lucide-react";
+import toast, {Toaster} from "react-hot-toast";
 
 const Page = () => {
     const params = useParams();
     const availabilityId = Array.isArray(params?.availabilityId) ? params.availabilityId[0] : params?.availabilityId;
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({
         firstName: "",
         lastName: "",
         email: "",
     });
+
+    const notifySuccess = () => toast.success('Slot successfully booked!');
 
     const handleSubmit = () => {
         const newErrors = { firstName: "", lastName: "", email: "" };
@@ -34,11 +38,13 @@ const Page = () => {
         setErrors(newErrors);
 
         if (!newErrors.firstName && !newErrors.lastName && !newErrors.email) {
-            // Submit logic here
+            setIsSubmitting(true);
+            notifySuccess();
         }
     };
 
     const errorClass = "text-red-500 text-sm w-full";
+
 
     return (
         <PageLayout title="Book Slot">
@@ -79,16 +85,22 @@ const Page = () => {
                 <button
                     type="button"
                     onClick={handleSubmit}
-                    className="bg-electric-blue text-white rounded-md py-2 px-6 mt-4 hover:bg-light-blue"
+                    disabled={isSubmitting}
+                    className={`${isSubmitting ? 'bg-light-blue ' : 'bg-electric-blue'} text-white rounded-md py-2 px-6 mt-4 ${!isSubmitting && 'hover:bg-light-blue'} `}
                 >
-                    Confirm
+                    {isSubmitting ?
+                        <LoaderCircle className="animate-spin w-4 h-4" /> :
+                        "Confirm"
+                    }
                 </button>
                 <button
                     type="button"
-                    className="bg-light-gray text-black rounded-md py-2 px-6 mt-4 hover:bg-light-blue"
+                    disabled={isSubmitting}
+                    className={`bg-light-gray ${isSubmitting ? 'text-gray-500' : 'text-black'} rounded-md py-2 px-6 mt-4 ${!isSubmitting && 'hover:bg-light-blue'}`}
                 >
                     Cancel
                 </button>
+                <Toaster />
             </div>
         </PageLayout>
     );
