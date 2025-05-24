@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from 'next/navigation'
+import { useCalendarStore } from "../../stores/useCalendarStore";
 
 export const CustomDayPicker = () => {
+    const { setDisplayedMonthYear, displayedMonthYear, setSelectedDate } = useCalendarStore();
     const [selected, setSelected] = React.useState<{
         from: Date | null;
         to: Date | null;
@@ -16,8 +18,8 @@ export const CustomDayPicker = () => {
     const userId = "cmazqg2gn0000f0qclgj098ns";
 
     const redirectToAvailableSlots = (date: Date) => {
-        const formattedDate = date.toISOString().split("T")[0];
-        router.push(`slots/${userId}/${formattedDate}`);
+        setSelectedDate(date);
+        router.push(`slots/${userId}`);
     }
 
     return (
@@ -26,6 +28,10 @@ export const CustomDayPicker = () => {
             navLayout="around"
             showOutsideDays
             captionLayout="dropdown"
+            onMonthChange={(value) => {
+                setDisplayedMonthYear(value);
+            }}
+            defaultMonth={displayedMonthYear}
             selected={
                 selected?.from && selected?.to
                     ? { from: selected.from, to: selected.to }

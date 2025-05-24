@@ -6,10 +6,13 @@ import { LoaderCircle } from "lucide-react";
 import toast, {Toaster} from "react-hot-toast";
 import Ok from "../../../../public/icons/ok.svg";
 import {PageLayout} from "../../../components/PageLayout/PageLayout";
+import {useCalendarStore} from "../../../stores/useCalendarStore";
+import {formatDateToReadableString} from "../../../helpers/dateHelper";
 
 const ConfirmPage = () => {
     const params = useParams();
     const router = useRouter();
+    const { selectedDate } = useCalendarStore();
     const availabilityId = Array.isArray(params?.availabilityId) ? params.availabilityId[0] : params?.availabilityId;
     const [isChangingSlot, setIsChangingSlot] = useState(false);
     const [isCancelling, setIsCancelling] = useState(false);
@@ -37,7 +40,7 @@ const ConfirmPage = () => {
             <div className="flex flex-col items-center justify-center w-full gap-2">
                 <Ok className="w-12 h-12 gap-4"/>
                 Successfully booked on
-                <b>Wednesday, April 7th, 2021 at 18:00 </b>
+                <b>{formatDateToReadableString(selectedDate)}</b>
                 <div className="flex gap-4">
                     <button
                         type="button"
