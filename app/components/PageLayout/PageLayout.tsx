@@ -15,7 +15,7 @@ export const PageLayout = (props : SkeletonProps) => {
 
     useEffect(() => {
         if (!selectedDate) {
-            router.push('/');
+            //router.push('/');
         }
     }, [selectedDate, router]);
 
@@ -30,7 +30,7 @@ export const PageLayout = (props : SkeletonProps) => {
                         <ArrowLeft className="w-6 h-6 mx-auto" />
                     </button>
                 }
-                <h1 className="flex-1 text-center text-2xl">{title}</h1>
+                <h1 className={title?.className ?? "flex-1 text-center text-2xl"}>{title?.text}</h1>
             </div>
             <div className="flex flex-wrap justify-center items-start gap-1 p-4 w-full  text-black">
                 {children}

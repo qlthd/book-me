@@ -1,6 +1,6 @@
 export type SkeletonProps = {
     children: React.ReactNode;
-    title?: string;
+    title?: Title;
     className?: string;
     previousBtn: PreviousButton;
 }
@@ -8,4 +8,9 @@ export type SkeletonProps = {
 export type PreviousButton = {
     hidden?: boolean;
     disabled?: boolean;
+}
+
+export type Title = {
+    text?: string;
+    className?: string;
 }

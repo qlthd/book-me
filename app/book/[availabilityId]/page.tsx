@@ -10,8 +10,21 @@ import toast, { Toaster } from "react-hot-toast";
 const Page = () => {
     const params = useParams();
     const router = useRouter();
+    const createBookingMutation = trpc.bookings.createBooking.useMutation();
+
     const availabilityId = Array.isArray(params?.availabilityId) ? params.availabilityId[0] : params?.availabilityId;
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+    });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData((prev) => ({ ...prev, [id]: value }));
+    };
+
     const [errors, setErrors] = useState({
         firstName: "",
         lastName: "",
@@ -20,17 +33,17 @@ const Page = () => {
 
     const notifySuccess = () => toast.success('Slot successfully booked!');
 
-    const handleSubmit = () => {
-        router.push(`/book/${params?.availabilityId}/confirm`);
+    const handleSubmit = async () => {
+
         const newErrors = { firstName: "", lastName: "", email: "" };
 
-        if (!document.getElementById("firstName")?.value) {
+        if (!formData.firstName) {
             newErrors.firstName = "First name is required.";
         }
-        if (!document.getElementById("lastName")?.value) {
+        if (!formData.lastName) {
             newErrors.lastName = "Last name is required.";
         }
-        const emailValue = document.getElementById("email")?.value;
+        const emailValue = formData.email;
         if (!emailValue) {
             newErrors.email = "Email is required.";
         } else if (!/\S+@\S+\.\S+/.test(emailValue)) {
@@ -41,7 +54,26 @@ const Page = () => {
 
         if (!newErrors.firstName && !newErrors.lastName && !newErrors.email) {
             setIsSubmitting(true);
-            notifySuccess();
+            const userId = "cmazqg2gn0000f0qclgj098ns";
+
+            try {
+                await createBookingMutation.mutateAsync({
+                    userId,
+                    inviteeFirstName: formData.firstName,
+                    inviteeLastName: formData.lastName,
+                    inviteeEmail: formData.email,
+                    eventTypeId: "cmazqg2gn0001f0qccjeqjp0k",
+                    availabilityId: availabilityId ?? "",
+                });
+                notifySuccess();
+                setTimeout(() => {
+                    setIsSubmitting(false);
+                    router.push(`/book/${availabilityId}/confirm`);
+                }, 1000);
+            } catch (error: any) {
+                setIsSubmitting(false);
+                toast.error(`Error: ${error.message}`);
+            }
         }
     };
 
@@ -49,13 +81,15 @@ const Page = () => {
 
 
     return (
-        <PageLayout title="Book Slot" previousBtn={{ disabled : isSubmitting }}>
+        <PageLayout title={{ text: "Book Slot" }} previousBtn={{ disabled : isSubmitting }}>
             <label htmlFor="firstName" className="w-full text-left mb-1 text-lg font-medium text-dark-gray">
                 First name
             </label>
             <input
                 id="firstName"
                 type="text"
+                value={formData.firstName}
+                onChange={handleInputChange}
                 className={`border ${errors.firstName ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
                 placeholder="Enter a value"
             />
@@ -67,6 +101,8 @@ const Page = () => {
             <input
                 id="lastName"
                 type="text"
+                value={formData.lastName}
+                onChange={handleInputChange}
                 className={`border ${errors.lastName ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
                 placeholder="Enter a value"
             />
@@ -78,6 +114,8 @@ const Page = () => {
             <input
                 id="email"
                 type="email"
+                value={formData.email}
+                onChange={handleInputChange}
                 className={`border ${errors.email ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
                 placeholder="Enter a value"
             />

@@ -36,9 +36,10 @@ model Availability {
   id             String      @id @default(cuid())
   user           User        @relation(fields: [userId], references: [id])
   userId         String
-  date          DateTime    // e.g. "2023-10-01"
-  startTime      String      // e.g. "09:00"
-  endTime        String      // e.g. "17:00"
+  date          DateTime
+  startTime      String
+  endTime        String
+  isBooked  Boolean  @default(false)
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -49,10 +50,11 @@ model Booking {
   eventTypeId    String
   host           User        @relation("HostBookings", fields: [hostId], references: [id])
   hostId         String
-  inviteeName    String
+  inviteeFirstName    String
+  inviteeLastName    String
   inviteeEmail   String
-  startTime      DateTime
-  endTime        DateTime
+  startTime      String
+  endTime        String
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }

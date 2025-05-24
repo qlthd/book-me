@@ -35,18 +35,30 @@ const ConfirmPage = () => {
         }, 2000);
     }
 
+    const viewBookings = () => {
+        router.push('/bookings');
+    }
+
     return (
         <PageLayout previousBtn={{ hidden: true }}>
             <div className="flex flex-col items-center justify-center w-full gap-2">
                 <Ok className="w-12 h-12 gap-4"/>
                 Successfully booked on
                 <b>{formatDateToReadableString(selectedDate)}</b>
+                <button
+                    type="button"
+                    onClick={viewBookings}
+                    disabled={isChangingSlot || isCancelling}
+                    className={`${isChangingSlot || isCancelling ? 'bg-light-blue ' : 'bg-electric-blue'} text-white rounded-md py-2 px-6 mt-4 ${!isChangingSlot && 'hover:bg-light-blue'} `}
+                >
+                    View my bookings
+                </button>
                 <div className="flex gap-4">
                     <button
                         type="button"
                         onClick={changeSlot}
                         disabled={isChangingSlot || isCancelling}
-                        className={`${isChangingSlot || isCancelling ? 'bg-light-blue ' : 'bg-electric-blue'} text-white rounded-md py-2 px-6 mt-4 ${!isChangingSlot && 'hover:bg-light-blue'} `}
+                        className={`${isChangingSlot || isCancelling ? 'bg-light-blue ' : 'bg-electric-blue'} bg-light-blue text-electric-blue rounded-md py-2 px-6 mt-4 ${!isChangingSlot && 'hover:bg-electric-blue hover:text-white'} `}
                     >
                         {isChangingSlot ?
                             <LoaderCircle className="animate-spin w-4 h-4" /> :

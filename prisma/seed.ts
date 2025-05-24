@@ -19,8 +19,8 @@ async function main() {
             },
             availability: {
                 create: [
-                    { date: new Date("2025-01-01"), startTime: '09:00', endTime: '12:00' },
-                    { date: new Date("2025-01-02"), startTime: '13:00', endTime: '17:00' },
+                    { date: new Date("2025-01-01"), startTime: '09:00', endTime: '09:30' },
+                    { date: new Date("2025-01-01"), startTime: '09:30', endTime: '10:00' },
                 ],
             },
         },

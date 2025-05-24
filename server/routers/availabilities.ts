@@ -21,7 +21,23 @@ export const availabilityRouter = router({
                 where: {
                     userId: userId,
                     date: parsedDate,
+                    isBooked: false,
                 },
+            });
+        }),
+    updateAvailability: publicProcedure
+        .input(
+            z.object({
+                availabilityId: z.string(),
+                isBooked: z.boolean(),
+            })
+        )
+        .mutation(async ({ input }) => {
+            const { availabilityId, isBooked } = input;
+
+            return prisma.availability.update({
+                where: { id: availabilityId },
+                data: { isBooked },
             });
         }),
 });

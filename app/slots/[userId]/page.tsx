@@ -28,7 +28,7 @@ const Page = () => {
 
 
     return (
-        <PageLayout title={formatDateToReadableString(selectedDate)} >
+        <PageLayout title={ { text: formatDateToReadableString(selectedDate) }} >
             {availableSlotsQueryResult.data && availableSlotsQueryResult.data.map((slot) => (
                 <div
                     className="bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer"
