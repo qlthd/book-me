@@ -10,7 +10,7 @@ const Page = () => {
     const userId = Array.isArray(params?.userId) ? params.userId[0] : params?.userId;
     const date = Array.isArray(params?.date) ? params.date[0] : params?.date;
     const router = useRouter();
-    const availableSlots = trpc.availabilities.getByUserAndDate.useQuery({ userId, date });
+    const availableSlotsQueryResult = trpc.availabilities.getByUserAndDate.useQuery({ userId, date });
 
     const [selectedSlot, setSelectedSlot] = useState(null);
 
@@ -31,7 +31,7 @@ const Page = () => {
 
     return (
         <PageLayout title={formatDate(new Date(date))} >
-            {availableSlots.data && availableSlots.data.map((slot) => (
+            {availableSlotsQueryResult.data && availableSlotsQueryResult.data.map((slot) => (
                 <div
                     className={`bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer ${
                         selectedSlot === slot ? "!bg-electric-blue text-white hover:bg-electric-blue" : ""
@@ -42,61 +42,11 @@ const Page = () => {
                     {slot.startTime}
                 </div>
             ))}
-            {availableSlots.data && availableSlots.data.map((slot) => (
-                <div
-                    className={`bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer ${
-                        selectedSlot === slot ? "!bg-electric-blue text-white hover:bg-electric-blue" : ""
-                    }`}
-                    key={slot}
-                    onClick={() => handleSelect(slot)}
-                >
-                    09:30
-                </div>
-            ))}
-            {availableSlots.data && availableSlots.data.map((slot) => (
-                <div
-                    className={`bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer ${
-                        selectedSlot === slot ? "!bg-electric-blue text-white hover:bg-electric-blue" : ""
-                    }`}
-                    key={slot}
-                    onClick={() => handleSelect(slot)}
-                >
-                    10:00
-                </div>
-            ))}
-            {availableSlots.data && availableSlots.data.map((slot) => (
-                <div
-                    className={`bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer ${
-                        selectedSlot === slot ? "!bg-electric-blue text-white hover:bg-electric-blue" : ""
-                    }`}
-                    key={slot}
-                    onClick={() => handleSelect(slot)}
-                >
-                    10:30
-                </div>
-            ))}
-            {availableSlots.data && availableSlots.data.map((slot) => (
-                <div
-                    className={`bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer ${
-                        selectedSlot === slot ? "!bg-electric-blue text-white hover:bg-electric-blue" : ""
-                    }`}
-                    key={slot}
-                    onClick={() => handleSelect(slot)}
-                >
-                    11:00
-                </div>
-            ))}
-            {availableSlots.data && availableSlots.data.map((slot) => (
-                <div
-                    className={`bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer ${
-                        selectedSlot === slot ? "!bg-electric-blue text-white hover:bg-electric-blue" : ""
-                    }`}
-                    key={slot}
-                    onClick={() => handleSelect(slot)}
-                >
-                    11:30
-                </div>
-            ))}
+            {
+                availableSlotsQueryResult.isLoading && Array.from({ length: 6 }).map((_, index) =>
+                <div className="bg-gray-200 animate-pulse rounded-lg p-2 m-2 text-center w-24 h-10"/>)
+            }
+
         </PageLayout>
     );
 };
