@@ -31,9 +31,7 @@ const Page = () => {
         <PageLayout title={formatDateToReadableString(selectedDate)} >
             {availableSlotsQueryResult.data && availableSlotsQueryResult.data.map((slot) => (
                 <div
-                    className={`bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer ${
-                        selectedSlot === slot ? "!bg-electric-blue text-white hover:bg-electric-blue" : ""
-                    }`}
+                    className="bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer"
                     key={slot}
                     onClick={() => handleSelect(slot)}
                 >
