@@ -39,7 +39,8 @@ model Availability {
   date          DateTime
   startTime      String
   endTime        String
-  isBooked  Boolean  @default(false)
+  booking     Booking?   @relation("AvailabilityBooking", fields: [bookingId], references: [id])
+  bookingId   String?    @unique
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -53,8 +54,7 @@ model Booking {
   inviteeFirstName    String
   inviteeLastName    String
   inviteeEmail   String
-  startTime      String
-  endTime        String
+  availability      Availability? @relation("AvailabilityBooking")
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }

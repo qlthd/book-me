@@ -18,6 +18,9 @@ export const bookingsRouter = router({
                 where: {
                     inviteeEmail: email
                 },
+                include: {
+                    availability: true,
+                },
             });
         }),
     createBooking: publicProcedure
@@ -47,8 +50,9 @@ export const bookingsRouter = router({
                     inviteeEmail,
                     hostId: userId,
                     eventTypeId,
-                    startTime: availability.startTime,
-                    endTime: availability.endTime,
+                    availability: {
+                        connect: { id: availabilityId },
+                    },
                     createdAt: new Date()
                 },
             });

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { trpc } from "@/utils/trpc";
 import { useParams, useRouter } from "next/navigation";
 import { PageLayout } from "../../components/PageLayout/PageLayout";
@@ -14,15 +14,14 @@ const Page = () => {
     const { selectedDate } = useCalendarStore();
 
     const formatDateYMD = (date: Date | null) => {
+        if (!date) return '';
         return new Intl.DateTimeFormat('en-CA').format(date);
     }
-    const availableSlotsQueryResult = trpc.availabilities.getByUserAndDate.useQuery({ userId, date: formatDateYMD(selectedDate) },
-        { enabled : !!selectedDate });
 
-    const [selectedSlot, setSelectedSlot] = useState(null);
+    const availableSlotsQueryResult = trpc.availabilities.getByUserAndDate.useQuery({ userId, date: formatDateYMD(selectedDate) },
+        { enabled : !!selectedDate && !!userId });
 
     const handleSelect = (slot: any) => {
-        setSelectedSlot(slot);
         router.push(`/book/${slot.id}`);
     };
 
@@ -30,17 +29,21 @@ const Page = () => {
     return (
         <PageLayout title={ { text: formatDateToReadableString(selectedDate) }} >
             {availableSlotsQueryResult.data && availableSlotsQueryResult.data.map((slot) => (
-                <div
+                <button
                     className="bg-light-gray rounded-lg p-2 m-2 text-center hover:bg-light-blue hover:text-electric-blue w-24 cursor-pointer"
-                    key={slot}
+                    key={slot.id}
                     onClick={() => handleSelect(slot)}
+                    type="button"
                 >
                     {slot.startTime}
-                </div>
+                </button>
             ))}
             {
                 availableSlotsQueryResult.isLoading && Array.from({ length: 6 }).map((_, index) =>
-                <div className="bg-gray-200 animate-pulse rounded-lg p-2 m-2 text-center w-24 h-10"/>)
+                <div
+                    className="bg-gray-200 animate-pulse rounded-lg p-2 m-2 text-center w-24 h-10"
+                    key={index}
+                />)
             }
 
         </PageLayout>

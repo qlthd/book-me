@@ -1,23 +1,15 @@
-import React, { useEffect } from "react";
-import { SkeletonProps } from "./PageLayout.types";
+import React from "react";
+import { PageLayoutProps } from "./PageLayout.types";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import {useCalendarStore} from "../../stores/useCalendarStore";
 
-export const PageLayout = (props : SkeletonProps) => {
-    const { children, title, className, previousBtn = { disabled: false, hidden: false } } = props;
+export const PageLayout = (props : PageLayoutProps) => {
+    const { children, title, previousBtn = { disabled: false, hidden: false } } = props;
     const router = useRouter();
-    const { selectedDate } = useCalendarStore();
 
     const handleBack = () => {
         router.back();
     };
-
-    useEffect(() => {
-        if (!selectedDate) {
-            //router.push('/');
-        }
-    }, [selectedDate, router]);
 
     return (
         <div className="text-black bg-white shadow-lg rounded-lg m-12 p-6 min-h-40">

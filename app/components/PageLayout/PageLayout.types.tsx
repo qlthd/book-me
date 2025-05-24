@@ -1,8 +1,8 @@
-export type SkeletonProps = {
+export type PageLayoutProps = {
     children: React.ReactNode;
     title?: Title;
     className?: string;
-    previousBtn: PreviousButton;
+    previousBtn?: PreviousButton;
 }
 
 export type PreviousButton = {
