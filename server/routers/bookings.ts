@@ -1,10 +1,28 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../index";
 import { PrismaClient } from "@prisma/client";
+import {$brand} from "zod/dist/types/v4";
 
 const prisma = new PrismaClient();
 
 export const bookingsRouter = router({
+    getBookingById: publicProcedure
+        .input(
+            z.object({
+                    bookingId: z.string(),
+            })
+        ).query(async ({ input }) => {
+            const { bookingId } = input;
+
+            return prisma.booking.findUnique({
+                where: {
+                    id: bookingId
+                },
+                include: {
+                    availability: true,
+                },
+            });
+        }),
     getBookingsByEmail: publicProcedure
         .input(
             z.object({
@@ -57,4 +75,24 @@ export const bookingsRouter = router({
                 },
             });
         }),
+        cancelBooking: publicProcedure
+        .input(
+            z.object({
+                bookingId: z.string(),
+            })
+        ).mutation(async ({ input }) => {
+            console.log("Cancel booking input:", input);
+            const { bookingId } = input;
+            const booking = await prisma.booking.findUnique({
+                where: { id: bookingId },
+            });
+            if (!booking) {
+                throw new Error("Booking not found");
+            }
+            return prisma.booking.delete(
+                {
+                    where: { id: bookingId },
+                }
+            );
+        })
 });
