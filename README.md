@@ -1,15 +1,15 @@
-![logo.png](logo.png)
 
-Book Me is a modern scheduling web application.
-<br/>
-⚠️⚠️ Work in progress. ⚠️⚠️ 
 
-![img.png](illu1.png)
-<br/>
-![img.png](illu2.png)
-<br/>
-![img.png](illu3.png)
-<br/>
+<div style="margin:auto; text-align:center;">
+    <img src="logo.png"/>
+    <h1>Book Me is a modern scheduling web application.</h1>
+    <p>⚠️⚠️ Work in progress. ⚠️⚠️ </p>
+    <img src="illu1.png"/>
+    <img src="illu2.png"/>
+    <img src="illu3.png"/>
+
+</div>
+
 ## 🔧 Tech Stack
 
 | Framework / Library | Version  |
