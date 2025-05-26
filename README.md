@@ -1,13 +1,15 @@
-## 🚀 Book Me
+![logo.png](logo.png)
 
 Book Me is a modern scheduling web application.
 <br/>
 ⚠️⚠️ Work in progress. ⚠️⚠️ 
 
 ![img.png](illu1.png)
+<br/>
 ![img.png](illu2.png)
+<br/>
 ![img.png](illu3.png)
-
+<br/>
 ## 🔧 Tech Stack
 
 | Framework / Library | Version  |
