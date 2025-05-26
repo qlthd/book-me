@@ -1,13 +1,13 @@
 
-
-<div style="margin:auto; text-align:center;">
-    <img src="logo.png"/>
-    <h1>Book Me is a modern scheduling web application.</h1>
-    <p>⚠️⚠️ Work in progress. ⚠️⚠️ </p>
-    <img src="illu1.png"/>
-    <img src="illu2.png"/>
-    <img src="illu3.png"/>
-
+<div align="center"> 
+    <h1>📅 Book me</h1> 
+    <p><strong>A modern scheduling web application.</strong></p> 
+    <p>🚧 <em>Work in progress</em> 🚧</p> 
+    <br /> 
+    <img src="illu1.png" alt="Illustration 1"/>
+    <img src="illu2.png" alt="Illustration 2"/>
+    <img src="illu3.png" alt="Illustration 3"/>
+    <img src="illu4.png" alt="Illustration 4"/> 
 </div>
 
 ## 🔧 Tech Stack
