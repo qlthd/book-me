@@ -7,18 +7,15 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist",
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@server/*": ["server/*"]
+      "@/*": ["./*"],
+      "@server/*": ["server/*"],
+      "@components/*": ["app/components/*"],
+      "@assets/*": ["app/assets/*"]
     },
     "jsx": "preserve",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "noEmit": true,
     "incremental": true,
@@ -32,9 +29,12 @@
     ]
   },
   "include": [
-    ".next/types/**/*.ts"
+    "app",
+    "components",
+    "pages",
+    "types",
+    ".next/types/**/*.ts",
+    "svg.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

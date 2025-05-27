@@ -1,3 +1,3 @@
 export type BookingDetailsProps = {
-    booking: any;
-}
+  booking: any;
+};
