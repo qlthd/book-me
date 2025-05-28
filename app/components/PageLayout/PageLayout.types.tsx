@@ -13,4 +13,5 @@ export type PreviousButton = {
 export type Title = {
   text?: string;
   className?: string;
+  disabled?: boolean;
 };

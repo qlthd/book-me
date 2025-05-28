@@ -12,3 +12,5 @@ yarn-error.log*
 
 .next
 .DS_Store
+.env
+*.env

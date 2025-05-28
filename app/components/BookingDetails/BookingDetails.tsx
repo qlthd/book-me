@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import { formatDateToReadableString } from "../../helpers/dateHelper";
 import Meet from "@assets/icons/meet.svg";
 import { BookingDetailsProps } from "./BookingDetails.types";
+import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export const BookingDetails = (props: BookingDetailsProps) => {
   const { booking } = props;
+  const { data: session, status } = useSession();
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-2">

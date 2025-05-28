@@ -14,6 +14,8 @@ export default {
         "electric-blue": "#0047FF",
         "light-blue": "#D8E3FF",
         "light-gray": "#e7ecef",
+        "baltic-sea": "#3c4043",
+        "snow-tiger": "#dadce0",
         "dark-gray": "#1F1F1F",
       },
     },

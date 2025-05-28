@@ -1,18 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PageLayout } from "@components/PageLayout/PageLayout";
 import { useRouter } from "next/navigation";
 import BookMeLogo from "@assets/icons/bookme.svg";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
+import { GooglePill } from "@components/GooglePill/GooglePill";
+import { useSession } from "next-auth/react";
 
-const Bookings = () => {
+const Login = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: false, password: false });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data: session, status } = useSession();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -50,7 +53,6 @@ const Bookings = () => {
         className={`border ${errors.email ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
         placeholder="Enter your email"
       />
-
       <label
         htmlFor="password"
         className="w-full text-left mb-1 text-lg font-medium text-dark-gray"
@@ -70,20 +72,36 @@ const Bookings = () => {
           className={`border ${errors.password ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
         />
       </div>
-      <button
-        type="button"
-        onClick={handleSubmit}
-        disabled={isSubmitting}
-        className={`${isSubmitting ? "bg-light-blue " : "bg-electric-blue"} text-white rounded-md py-2 px-6 mt-4 ${!isSubmitting && "hover:bg-light-blue"} `}
-      >
-        {isSubmitting ? (
-          <LoaderCircle className="animate-spin w-4 h-4" />
-        ) : (
-          "Sign-in"
-        )}
+      <button className="flex w-full justify-end text-electric-blue text-sm hover:underline cursor-pointer">
+        Forgot your password ?
       </button>
+      <div className="flex flex-col items-center gap-1 w-full">
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className={`${isSubmitting ? "bg-light-blue " : "bg-electric-blue"} text-white rounded-md py-2 px-6 mt-4 ${!isSubmitting && "hover:bg-light-blue"} `}
+        >
+          {isSubmitting ? (
+            <LoaderCircle className="animate-spin w-4 h-4" />
+          ) : (
+            "Sign in"
+          )}
+        </button>
+        <div
+          className="flex items-center gap-2 my-2 w-full"
+          data-testid="divider"
+        >
+          <hr className="w-full h-px bg-gray-300 border-0" />
+          <p className="w-full text-sm text-center text-baltic-sea">
+            or sign in with
+          </p>
+          <hr className="w-full h-px bg-gray-300 border-0" />
+        </div>
+        <GooglePill />
+      </div>
     </PageLayout>
   );
 };
 
-export default Bookings;
+export default Login;
