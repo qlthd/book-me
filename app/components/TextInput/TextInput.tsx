@@ -13,11 +13,12 @@ export type TextInputProps = {
 export const TextInput = (props: TextInputProps) => {
   const { error, value, name, onChange, type, placeholder } = props;
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
   return (
     <>
       <label
         htmlFor={name.toLowerCase()}
-        className="w-full text-left mb-1 text-lg font-medium text-dark-gray"
+        className="w-full text-left mb-1 text-sm font-medium text-dark-gray"
       >
         {name}
       </label>

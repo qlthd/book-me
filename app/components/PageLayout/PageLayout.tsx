@@ -38,7 +38,7 @@ export const PageLayout = (props: PageLayoutProps) => {
     (status === "unauthenticated" && unauthenticatedRoutes.includes(pathname));
 
   return shouldRenderContent ? (
-    <div className="text-black bg-white shadow-lg rounded-lg m-12 p-6 min-h-40">
+    <div className="text-black max-w-lg mx-auto bg-white shadow-lg rounded-lg m-12 p-6 min-h-40">
       {(!previousBtn.hidden || !title.disabled) && (
         <div className="flex items-center gap-2 mb-4">
           {!previousBtn.hidden && (

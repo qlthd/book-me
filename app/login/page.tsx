@@ -7,6 +7,8 @@ import BookMeLogo from "@assets/icons/bookme.svg";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { GooglePill } from "@components/GooglePill/GooglePill";
 import { useSession } from "next-auth/react";
+import { Modal } from "@components/Modal/Modal";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const router = useRouter();
@@ -15,6 +17,7 @@ const Login = () => {
   const [errors, setErrors] = useState({ email: false, password: false });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session, status } = useSession();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +32,11 @@ const Login = () => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+  };
+
+  const onModalConfirm = () => {
+    setIsModalOpen(false);
+    toast.success("Email sent successfully!");
   };
 
   return (
@@ -72,7 +80,10 @@ const Login = () => {
           className={`border ${errors.password ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
         />
       </div>
-      <button className="flex w-full justify-end text-electric-blue text-sm hover:underline cursor-pointer">
+      <button
+        className="flex w-full justify-end text-electric-blue text-sm hover:underline cursor-pointer"
+        onClick={() => setIsModalOpen(true)}
+      >
         Forgot your password ?
       </button>
       <div className="flex flex-col items-center gap-1 w-full">
@@ -80,10 +91,10 @@ const Login = () => {
           type="button"
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className={`${isSubmitting ? "bg-light-blue " : "bg-electric-blue"} text-white rounded-md py-2 px-6 mt-4 ${!isSubmitting && "hover:bg-light-blue"} `}
+          className={`${isSubmitting ? "bg-light-blue w-24" : "bg-electric-blue"} text-white rounded-md py-2 px-6 mt-4 ${!isSubmitting && "hover:bg-light-blue"} `}
         >
           {isSubmitting ? (
-            <LoaderCircle className="animate-spin w-4 h-4" />
+            <LoaderCircle className="animate-spin h-6 w-6 mx-auto" />
           ) : (
             "Sign in"
           )}
@@ -99,6 +110,8 @@ const Login = () => {
           <hr className="w-full h-px bg-gray-300 border-0" />
         </div>
         <GooglePill />
+        {isModalOpen && <Modal onConfirm={onModalConfirm} />}
+        <Toaster />
       </div>
     </PageLayout>
   );
