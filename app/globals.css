@@ -14,6 +14,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@font-face {
+  font-family: 'Circuit';
+  src: url('/fonts/circuit.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /*@media (prefers-color-scheme: dark) {*/
 /*  :root {*/
 /*    --background: #0a0a0a;*/
