@@ -3,7 +3,7 @@ import React from "react";
 import Ok from "@assets/icons/ok.svg";
 import { PageLayout } from "@components/PageLayout/PageLayout";
 
-export const EmailVerifiedPage = () => {
+const EmailVerifiedPage = () => {
   return (
     <PageLayout
       className="flex flex-col items-center justify-center w-full gap-2 p-12"

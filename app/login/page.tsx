@@ -9,6 +9,7 @@ import { GooglePill } from "@components/GooglePill/GooglePill";
 import { useSession } from "next-auth/react";
 import { Modal } from "@components/Modal/Modal";
 import toast, { Toaster } from "react-hot-toast";
+import { FacebookPill } from "@components/FacebookPill/FacebookPill";
 
 const Login = () => {
   const router = useRouter();
@@ -114,6 +115,8 @@ const Login = () => {
           <hr className="w-full h-px bg-gray-300 border-0" />
         </div>
         <GooglePill />
+        <FacebookPill />
+
         {isModalOpen && <Modal onConfirm={onModalConfirm} onClose={onClose} />}
         <Toaster />
       </div>

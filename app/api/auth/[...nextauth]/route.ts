@@ -1,15 +1,20 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
+
 import jwt from "jsonwebtoken";
 import { JWT } from "next-auth/jwt";
 
-// const MAX_AGE = 1 * 24 * 60 * 60;
-const MAX_AGE = 10;
+const MAX_AGE = 1 * 24 * 60 * 60;
 const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET || "",
       clientId: process.env.GOOGLE_OAUTH_CLIENT_ID || "",
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_OAUTH_CLIENT_ID || "",
+      clientSecret: process.env.FACEBOOK_OAUTH_CLIENT_SECRET || "",
     }),
   ],
   pages: {
