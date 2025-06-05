@@ -3,6 +3,7 @@ export type PageLayoutProps = {
   title?: Title;
   className?: string;
   previousBtn?: PreviousButton;
+  fullWidth?: boolean;
 };
 
 export type PreviousButton = {

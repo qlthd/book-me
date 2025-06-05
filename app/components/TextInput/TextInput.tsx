@@ -13,7 +13,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     return (
-      <>
+      <div className="">
         <label
           htmlFor={name.toLowerCase()}
           className="w-full text-left mb-1 text-sm font-medium text-dark-gray"
@@ -41,7 +41,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           />
           <p className="text-red-500 min-h-[1.5rem]">{error ?? ""}</p>
         </div>
-      </>
+      </div>
     );
   },
 );
