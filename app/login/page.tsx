@@ -39,6 +39,10 @@ const Login = () => {
     toast.success("Email sent successfully!");
   };
 
+  const onClose = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <PageLayout
       title={{
@@ -110,7 +114,7 @@ const Login = () => {
           <hr className="w-full h-px bg-gray-300 border-0" />
         </div>
         <GooglePill />
-        {isModalOpen && <Modal onConfirm={onModalConfirm} />}
+        {isModalOpen && <Modal onConfirm={onModalConfirm} onClose={onClose} />}
         <Toaster />
       </div>
     </PageLayout>
