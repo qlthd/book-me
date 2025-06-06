@@ -24,7 +24,7 @@ export const PageLayout = (props: PageLayoutProps) => {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login");
+      //router.push("/login");
     }
     if (
       unauthenticatedRoutes.find((r) => r == pathname) &&
@@ -34,9 +34,7 @@ export const PageLayout = (props: PageLayoutProps) => {
     }
   }, [status]);
 
-  const shouldRenderContent =
-    (status === "authenticated" && !unauthenticatedRoutes.includes(pathname)) ||
-    (status === "unauthenticated" && unauthenticatedRoutes.includes(pathname));
+  const shouldRenderContent = true;
 
   return shouldRenderContent ? (
     <div

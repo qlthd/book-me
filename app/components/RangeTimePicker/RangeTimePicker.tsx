@@ -1,38 +1,27 @@
 import React, { useEffect } from "react";
-import Google from "@assets/icons/google.svg";
-import { signIn, signOut } from "next-auth/react";
-import { TextInput } from "../TextInput/TextInput";
-import { useForm } from "react-hook-form";
-import { ForgotPasswordSchema } from "@components/Modal/Modal.types";
-import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  RangeTimePickerFormValues,
-  RangeTimePickerSchema,
-} from "@components/RangeTimePicker/RangeTimePicker.props";
-import TimeInput from "@components/TimeInput/TimeInput";
+import { TimeInput } from "@components/TimeInput/TimeInput";
+import { UseFormRegister } from "react-hook-form";
 
-export const RangeTimePicker = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<RangeTimePickerFormValues>({
-    resolver: yupResolver(RangeTimePickerSchema),
-  });
+type RangeTimePickerProps = {
+  startTimeError?: string;
+  endTimeError?: string;
+  register: UseFormRegister<any>;
+};
 
+export const RangeTimePicker = (props: RangeTimePickerProps) => {
+  const { startTimeError, endTimeError, register } = props;
   return (
-    <div className="flex gap-x-8 ">
-      <TextInput
-        error={errors.startTime?.message}
+    <div className="flex w-full gap-x-6">
+      <TimeInput
+        label="Start time"
+        error={startTimeError}
         {...register("startTime")}
-        name="Start time"
       />
-      <TextInput
-        error={errors.startTime?.message}
+      <TimeInput
+        label="End time"
+        error={endTimeError}
         {...register("endTime")}
-        name="End time"
       />
-      {/*<TimeInput />*/}
     </div>
   );
 };

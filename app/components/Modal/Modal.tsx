@@ -49,7 +49,11 @@ export const Modal = (props: ModalProps) => {
               </p>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <TextInput error={errors.email?.message} {...register("email")} />
+              <TextInput
+                error={errors.email?.message}
+                {...register("email")}
+                label="Email"
+              />
               <div className="flex gap-x-2">
                 <button
                   type="submit"
