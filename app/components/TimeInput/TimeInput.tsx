@@ -19,6 +19,7 @@ const generateTimeOptions = (interval) => {
 export type TimeInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   error?: string;
+  onTimeChange?: (newTime: string) => void;
 };
 
 export const TimeInput = (props: TimeInputProps) => {
@@ -27,7 +28,7 @@ export const TimeInput = (props: TimeInputProps) => {
   const timepickerRef = useRef(null);
   const toggleRef = useRef(null);
   const [times] = useState(generateTimeOptions(15));
-  const { label, error, onChange, ...rest } = props;
+  const { label, error, onTimeChange, ...rest } = props;
   // Toggle timepicker visibility
   const toggleTimepickerVisibility = () => {
     setIsVisible(!isVisible);
@@ -35,7 +36,11 @@ export const TimeInput = (props: TimeInputProps) => {
 
   // Handle time selection
   const handleTimeSelection = (hour, minute, period) => {
+    const newTime = `${hour}:${minute} ${period}`;
     setSelectedTime(`${hour} ${minute} ${period}`);
+    if (onTimeChange) {
+      onTimeChange(newTime);
+    }
     setIsVisible(false);
   };
 
@@ -79,7 +84,7 @@ export const TimeInput = (props: TimeInputProps) => {
               <div>
                 <div className="relative">
                   {/* Timepicker Input with Icons */}
-                  <div className="relative flex items-center">
+                  <div className="grid items-center w-full">
                     {/* Clock Icon */}
                     <span className="absolute left-0 pl-3 text-dark-5">
                       <svg
@@ -111,9 +116,10 @@ export const TimeInput = (props: TimeInputProps) => {
                       label={label}
                       error={error}
                       type="text"
-                      className={`w-full rounded-lg border border-stroke ${error && "border-red-500"} bg-transparent py-2.5 pl-[37px] pr-2 text-dark-2 outline-none transition focus:border-primary dark:border-dark-3 dark:text-dark-6 dark:focus:border-primary`}
+                      className={`w-full rounded-lg border border-stroke ${error && "border-red-500"} bg-transparent py-2.5 pl-[37px] text-dark-2 outline-none transition focus:border-primary dark:border-dark-3 dark:text-dark-6 dark:focus:border-primary`}
                       placeholder="__ : __ __"
                       onClick={toggleTimepickerVisibility}
+                      value={selectedTime}
                       {...rest}
                     />
                     <span

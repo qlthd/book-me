@@ -1,16 +1,28 @@
 import React, { useEffect } from "react";
-import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import {
+  DayPicker,
+  DayPickerProps,
+  getDefaultClassNames,
+} from "react-day-picker";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCalendarStore } from "../../stores/useCalendarStore";
+import "react-day-picker/style.css";
 
-export const CustomDayPicker = () => {
+type CustomDayPickerProps = {
+  dayButton?: DayPickerProps["components"] extends { DayButton: infer T }
+    ? T
+    : never;
+};
+
+export const CustomDayPicker = (props: CustomDayPickerProps) => {
   const { setDisplayedMonthYear, displayedMonthYear, setSelectedDate } =
     useCalendarStore();
   const [selected, setSelected] = React.useState<{
     from: Date | null;
     to: Date | null;
   }>();
+  const { dayButton } = props;
 
   const router = useRouter();
 
@@ -23,6 +35,19 @@ export const CustomDayPicker = () => {
     router.push(`slots/${userId}`);
   };
 
+  const DefaultDayButton = ({ modifiers, day, ...buttonProps }: any) => {
+    const isOutside = modifiers.outside;
+    const isToday = modifiers.today;
+    return (
+      <button
+        {...buttonProps}
+        onClick={() => redirectToAvailableSlots(day.date)}
+        className={`w-10 h-10 m-0.5 rounded-lg ${isOutside ? "text-zinc-400" : `text-zinc-950 bg-light-gray w-10 h-10 m-0.5 group-aria-selected:bg-electric-blue group-aria-selected:text-white hover:bg-light-blue hover:text-electric-blue rounded-lg ${isToday && "bg-gray-200"}`}`}
+      />
+    );
+  };
+
+  console.log(selected);
   return (
     <DayPicker
       mode="range"
@@ -59,18 +84,7 @@ export const CustomDayPicker = () => {
         dropdown_root: "bg-white rounded-lg px-4 py-2 my-24",
       }}
       components={{
-        DayButton: ({ modifiers, day, ...buttonProps }) => {
-          const isOutside = modifiers.outside;
-          const isToday = modifiers.today;
-          const date = modifiers.date;
-          return (
-            <button
-              {...buttonProps}
-              onClick={() => redirectToAvailableSlots(day.date)}
-              className={`w-10 h-10 m-0.5 rounded-lg ${isOutside ? "text-zinc-400" : `text-zinc-950 bg-light-gray w-10 h-10 m-0.5 group-aria-selected:bg-electric-blue group-aria-selected:text-white hover:bg-light-blue hover:text-electric-blue rounded-lg ${isToday && "bg-gray-200"}`} }`}
-            />
-          );
-        },
+        DayButton: dayButton ?? DefaultDayButton,
         NextMonthButton: ({ onClick, dir }) => (
           <button
             onClick={onClick}

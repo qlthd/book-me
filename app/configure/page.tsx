@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { PageLayout } from "@components/PageLayout/PageLayout";
 import { TextInput } from "@components/TextInput/TextInput";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import {
   ForgotPasswordFormValues,
   ForgotPasswordSchema,
@@ -14,6 +14,7 @@ import { TrashIcon } from "lucide-react";
 import Switch from "@components/Switch/Switch";
 import { CustomDayPicker } from "@components/CustomDayPicker/CustomDayPicker";
 import * as yup from "yup";
+import { trpc } from "@/utils/trpc";
 
 const timeStringToMinutes = (time: string) => {
   const [_, hourStr, minuteStr, period] =
@@ -67,120 +68,128 @@ export type ConfigureFormValues = {
 };
 
 const ConfigurePage = () => {
+  const methods = useForm<ConfigureFormValues>({
+    resolver: yupResolver(ConfigureFormSchema) as any,
+  });
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors, isSubmitting },
-  } = useForm<ConfigureFormValues>({
-    resolver: yupResolver(ConfigureFormSchema) as any,
-  });
+  } = methods;
   const [breakTimesCount, setBreakTimesCount] = useState(0);
-  const onSubmit: SubmitHandler<ConfigureFormValues> = (data) => {
-    console.log(data);
+
+  const availabilitiesCreateMutation =
+    trpc.availabilities.createAvailability.useMutation({});
+
+  const onSubmit: SubmitHandler<ConfigureFormValues> = (data) => {};
+
+  const DefaultDayButton = ({ modifiers, day, ...buttonProps }: any) => {
+    const isOutside = modifiers.outside;
+    const isToday = modifiers.today;
+
+    return (
+      <button
+        {...buttonProps}
+        className={`w-10 h-10 m-0.5 rounded-lg ${isOutside ? "text-zinc-400" : `text-zinc-950 bg-light-gray w-10 h-10 m-0.5 group-aria-selected:bg-electric-blue group-aria-selected:text-white hover:bg-light-blue hover:text-electric-blue rounded-lg ${isToday && "bg-gray-200"}`}`}
+      />
+    );
   };
 
   return (
-    <PageLayout
-      className="mx-4"
-      previousBtn={{ hidden: true }}
-      title={{
-        text: "Configure meeting parameters and availability",
-        className: "text-2xl",
-      }}
-      fullWidth
-    >
-      {JSON.stringify(getValues(), null, 2)}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex">
-          <div>
-            <div className="grid grid-cols-2 gap-4">
-              <TextInput
-                error={errors.meetingDuration?.message}
-                label="Meeting duration (minutes)"
-                {...register("meetingDuration")}
-                type="number"
-              />
-              <TextInput
-                error={errors.bufferTime?.message}
-                label="Buffer time (minutes)"
-                {...register("bufferTime")}
-                type="number"
-              />
-              <div className="col-span-2">
+    <div className="bg-[#f9fafb] p-4">
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-2 grid-rows-2 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h1 className="text-xl mb-4">Time settings</h1>
+              <div className="grid grid-cols-2 gap-x-8">
+                <TextInput
+                  error={errors.meetingDuration?.message}
+                  label="Meeting duration (minutes)"
+                  {...register("meetingDuration")}
+                  type="number"
+                />
+                <TextInput
+                  error={errors.bufferTime?.message}
+                  label="Buffer time (minutes)"
+                  {...register("bufferTime")}
+                  type="number"
+                />
                 <RangeTimePicker
                   startTimeError={errors.startTime?.message}
                   endTimeError={errors.endTime?.message}
-                  register={register}
                 />
               </div>
+              <div>
+                <div className="flex items-center justify-between my-2">
+                  <h1 className="text-lg">Break times</h1>
+                  <button
+                    className="border bg-electric-blue  text-white hover:bg-light-blue rounded-lg px-4 py-2"
+                    onClick={() => setBreakTimesCount(breakTimesCount + 1)}
+                    type="button"
+                  >
+                    Add breaks
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 gap-4">
+                  {breakTimesCount == 0 && (
+                    <p className="text-gray-500 text-sm">
+                      No breaks configured
+                    </p>
+                  )}
+                  {Array.from({ length: breakTimesCount }).map((_, index) => (
+                    <div key={index} className="inline-flex gap-2 items-center">
+                      <div className="grid grid-cols-2 gap-x-8">
+                        <RangeTimePicker />
+                      </div>
+                      <button
+                        type="button"
+                        className="bg-red-500 hover:bg-red-400 rounded-full p-3 h-10"
+                        onClick={() => setBreakTimesCount(breakTimesCount - 1)}
+                      >
+                        <TrashIcon color="white" size={18} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-
-            <div>
-              <div className="flex items-center justify-between my-2">
-                <h1 className="text-xl">Break times</h1>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <CustomDayPicker dayButton={DefaultDayButton} />
+            </div>
+            <div className="col-span-2 bg-white p-6 rounded-lg shadow-lg">
+              <h1 className="text-xl mb-4">Meeting configuration</h1>
+              <div className="">
+                <label htmlFor="description" className="block mb-2 font-medium">
+                  Meeting description
+                </label>
+                <textarea
+                  className="border border-gray-300 w-full rounded-md"
+                  rows={5}
+                  id="description"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-x-6 mt-8">
+                <Switch
+                  description="Make phone number mandatory for bookings"
+                  label="Require phone number"
+                />
+                <Switch label="Auto-accept bookings" />
+              </div>
+              <div className="mt-8">
                 <button
-                  className="border border-electric-blue  text-electric-blue hover:bg-light-blue rounded-lg px-4 py-2"
-                  onClick={() => setBreakTimesCount(breakTimesCount + 1)}
+                  className="bg-electric-blue  text-white hover:bg-light-blue rounded-lg px-4 py-2"
+                  type="submit"
                 >
-                  Add break time
+                  Save
                 </button>
               </div>
-              <div className="grid grid-cols-1 gap-4">
-                {breakTimesCount == 0 && (
-                  <p className="text-gray-500 text-sm">No breaks configured</p>
-                )}
-                {Array.from({ length: breakTimesCount }).map((_, index) => (
-                  <CardLayout
-                    key={index}
-                    className="flex items-center justify-between"
-                  >
-                    <RangeTimePicker />
-                    <button
-                      type="button"
-                      className="bg-red-500 hover:bg-red-400 rounded-full p-3"
-                      onClick={() => setBreakTimesCount(breakTimesCount - 1)}
-                    >
-                      <TrashIcon color="white" size={18} />
-                    </button>
-                  </CardLayout>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-12">
-              <label
-                htmlFor="description"
-                className="block mb-2 text-lg font-medium"
-              >
-                Meeting description
-              </label>
-              <textarea
-                className="border border-gray-300 w-full rounded-md"
-                rows="3"
-                id="description"
-              />
-            </div>
-            <div className="inline-flex gap-x-6 mt-8">
-              <Switch
-                description="Make phone number mandatory for bookings"
-                label="Require phone number"
-              />
-              <Switch label="Auto-accept bookings" />
-            </div>
-            <div className="mt-8">
-              <button
-                className="bg-electric-blue  text-white hover:bg-light-blue rounded-lg px-4 py-2"
-                type="submit"
-              >
-                Save
-              </button>
             </div>
           </div>
-          <CustomDayPicker />
-        </div>
-      </form>
-    </PageLayout>
+        </form>
+      </FormProvider>
+    </div>
   );
 };
 export default ConfigurePage;

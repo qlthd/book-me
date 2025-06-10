@@ -42,7 +42,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
             value={value}
             {...rest}
           />
-          <p className="text-red-500 min-h-[1.5rem]">{error ?? ""}</p>
+          <p className="text-red-500 text-sm min-h-[1.5rem]">{error ?? ""}</p>
         </div>
       </div>
     );
