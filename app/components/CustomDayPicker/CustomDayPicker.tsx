@@ -10,9 +10,9 @@ import { useCalendarStore } from "../../stores/useCalendarStore";
 import "react-day-picker/style.css";
 
 type CustomDayPickerProps = {
-  dayButton?: DayPickerProps["components"] extends { DayButton: infer T }
-    ? T
-    : never;
+  dayButton?: (props: any) => React.JSX.Element;
+  onDateRangeChange?: (range: { from?: Date; to?: Date } | undefined) => void;
+  initialRange?: { from?: Date; to?: Date };
 };
 
 export const CustomDayPicker = (props: CustomDayPickerProps) => {
@@ -47,7 +47,6 @@ export const CustomDayPicker = (props: CustomDayPickerProps) => {
     );
   };
 
-  console.log(selected);
   return (
     <DayPicker
       mode="range"
@@ -63,13 +62,14 @@ export const CustomDayPicker = (props: CustomDayPickerProps) => {
           ? { from: selected.from, to: selected.to }
           : undefined
       }
-      onSelect={(selected) =>
+      onSelect={(selected) => {
         setSelected(
           selected?.from && selected?.to
             ? { from: selected.from, to: selected.to }
             : undefined,
-        )
-      }
+        );
+        props.onDateRangeChange({ from: selected.from, to: selected.to });
+      }}
       // disabled={[{ before: today }]}
       className="custom-dropdown-root"
       classNames={{

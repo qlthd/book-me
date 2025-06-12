@@ -29,7 +29,7 @@ export const availabilityRouter = router({
     .input(
       z.object({
         meetingDuration: z.number(),
-        bufferTime: z.number(),
+        bufferTime: z.number().optional(),
         meetingDescription: z.string(),
         isPhoneRequested: z.boolean(),
         isAutomaticallyAccepted: z.boolean(),

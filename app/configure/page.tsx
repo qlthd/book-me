@@ -55,16 +55,20 @@ const ConfigureFormSchema = yup.object().shape({
     ),
   phoneNumberRequired: yup.boolean().required(),
   autoAcceptBookings: yup.boolean().required(),
+  startDate: yup.string().required("Start time is required"),
+  endDate: yup.string().required("Start time is required"),
 });
 
 export type ConfigureFormValues = {
   meetingDuration: number;
-  bufferTime: number | null | undefined;
+  bufferTime: number | undefined;
   meetingDescription: string;
   phoneNumberRequired: boolean;
   autoAcceptBookings: boolean;
   startTime: string;
   endTime: string;
+  startDate: string;
+  endDate: string;
 };
 
 const ConfigurePage = () => {
@@ -82,7 +86,17 @@ const ConfigurePage = () => {
   const availabilitiesCreateMutation =
     trpc.availabilities.createAvailability.useMutation({});
 
-  const onSubmit: SubmitHandler<ConfigureFormValues> = (data) => {};
+  const onSubmit: SubmitHandler<ConfigureFormValues> = (data) => {
+    availabilitiesCreateMutation.mutate({
+      meetingDuration: data.meetingDuration,
+      bufferTime: data.bufferTime,
+      startDate: new Date(2025, 0, 1, ...data.startTime.split(":").map(Number)),
+      endDate: new Date(data.endTime),
+      isAutomaticallyAccepted: data.autoAcceptBookings,
+      isPhoneRequested: data.phoneNumberRequired,
+      meetingDescription: data.meetingDescription,
+    });
+  };
 
   const DefaultDayButton = ({ modifiers, day, ...buttonProps }: any) => {
     const isOutside = modifiers.outside;
@@ -155,8 +169,32 @@ const ConfigurePage = () => {
                 </div>
               </div>
             </div>
+            {JSON.stringify(getValues())}
             <div className="bg-white p-6 rounded-lg shadow-lg">
-              <CustomDayPicker dayButton={DefaultDayButton} />
+              <CustomDayPicker
+                dayButton={DefaultDayButton}
+                onDateRangeChange={(range) => {
+                  console.log("Selected range:", range);
+                  if (range?.from) {
+                    methods.setValue("startDate", range.from.toISOString(), {
+                      shouldValidate: true,
+                    });
+                  }
+                  if (range?.to) {
+                    methods.setValue("endDate", range.to.toISOString(), {
+                      shouldValidate: true,
+                    });
+                  }
+                }}
+                initialRange={{
+                  from: methods.watch("startDate")
+                    ? new Date(methods.watch("startDate"))
+                    : undefined,
+                  to: methods.watch("endDate")
+                    ? new Date(methods.watch("endDate"))
+                    : undefined,
+                }}
+              />
             </div>
             <div className="col-span-2 bg-white p-6 rounded-lg shadow-lg">
               <h1 className="text-xl mb-4">Meeting configuration</h1>
