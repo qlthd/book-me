@@ -117,7 +117,7 @@ export const TimeInput = (props: TimeInputProps) => {
                       error={error}
                       type="text"
                       className={`w-full rounded-lg border border-stroke ${error && "border-red-500"} bg-transparent py-2.5 pl-[37px] text-dark-2 outline-none transition focus:border-primary dark:border-dark-3 dark:text-dark-6 dark:focus:border-primary`}
-                      placeholder="__ : __ __"
+                      placeholder="__ __ __"
                       onClick={toggleTimepickerVisibility}
                       value={selectedTime}
                       {...rest}
@@ -148,7 +148,7 @@ export const TimeInput = (props: TimeInputProps) => {
                   {isVisible && (
                     <div
                       ref={timepickerRef}
-                      className="shadow-datepicker no-scrollbar absolute right-0 -mt-2 h-[262px] w-[162px] overflow-hidden overflow-y-auto rounded-md border border-stroke bg-white p-2 dark:border-dark-3 dark:bg-dark-2 z-10"
+                      className="shadow-datepicker no-scrollbar absolute right-0 -mt-4 h-[262px] w-[162px] overflow-hidden overflow-y-auto rounded-md border border-stroke bg-white p-2 dark:border-dark-3 dark:bg-dark-2 z-10"
                     >
                       {times.map((time, index) => {
                         const timeString = `${time.hour} ${time.minute} ${time.period}`;
@@ -168,7 +168,7 @@ export const TimeInput = (props: TimeInputProps) => {
                             }
                           >
                             <div
-                              className={`hour flex h-[46px] w-full max-w-[46px] items-center justify-center rounded-md text-sm font-medium ${
+                              className={`hour flex w-full max-w-[46px] items-center justify-center rounded-md text-sm font-medium ${
                                 isSelected
                                   ? "bg-electric-blue text-white"
                                   : "text-dark-3 dark:text-dark-6"
@@ -177,7 +177,7 @@ export const TimeInput = (props: TimeInputProps) => {
                               {time.hour}
                             </div>
                             <div
-                              className={`minute flex h-[46px] w-full max-w-[46px] items-center justify-center rounded-md text-sm font-medium ${
+                              className={`minute flex w-full max-w-[46px] items-center justify-center rounded-md text-sm font-medium ${
                                 isSelected
                                   ? "bg-electric-blue text-white"
                                   : "text-dark-3 dark:text-dark-6"

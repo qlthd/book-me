@@ -28,11 +28,9 @@ export const CustomDayPicker = (props: CustomDayPickerProps) => {
 
   const defaultClassNames = getDefaultClassNames();
 
-  const userId = "cmazqg2gn0000f0qclgj098ns";
-
   const redirectToAvailableSlots = (date: Date) => {
     setSelectedDate(date);
-    router.push(`slots/${userId}`);
+    //router.push(`slots/${userId}`);
   };
 
   const DefaultDayButton = ({ modifiers, day, ...buttonProps }: any) => {
@@ -74,7 +72,7 @@ export const CustomDayPicker = (props: CustomDayPickerProps) => {
       className="custom-dropdown-root"
       classNames={{
         selected: `text-white bg-electric-blue`,
-        root: `${defaultClassNames.root} bg-white shadow-lg p-5 text-dark-gray w-max mx-auto rounded-lg my-4`,
+        root: `${defaultClassNames.root} bg-white-smoke shadow-custom-soft p-5 text-dark-gray w-max rounded-lg`,
         day: `group w-10 h-10 rounded-full`,
         weekday: `text-dark-gray font-semibold`,
         weekdays: "my-8",

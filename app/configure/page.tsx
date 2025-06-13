@@ -86,6 +86,19 @@ const ConfigurePage = () => {
   const availabilitiesCreateMutation =
     trpc.availabilities.createAvailability.useMutation({});
 
+  function mergeDateAndTime(startDate: string, startTime: string): string {
+    const date = new Date(startDate);
+    const match = startTime.match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);
+    if (!match) throw new Error("Format d'heure invalide");
+    let [_, hourStr, minuteStr, period] = match;
+    let hour = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+    if (period.toUpperCase() === "PM" && hour !== 12) hour += 12;
+    if (period.toUpperCase() === "AM" && hour === 12) hour = 0;
+    date.setUTCHours(hour, minute, 0, 0);
+    return date.toISOString();
+  }
+
   const onSubmit: SubmitHandler<ConfigureFormValues> = (data) => {
     availabilitiesCreateMutation.mutate({
       meetingDuration: data.meetingDuration,
@@ -97,6 +110,7 @@ const ConfigurePage = () => {
       meetingDescription: data.meetingDescription,
     });
   };
+  console.log(mergeDateAndTime("2025-06-13T09:53:32.494Z", "01:12 AM"));
 
   const DefaultDayButton = ({ modifiers, day, ...buttonProps }: any) => {
     const isOutside = modifiers.outside;
@@ -174,7 +188,6 @@ const ConfigurePage = () => {
               <CustomDayPicker
                 dayButton={DefaultDayButton}
                 onDateRangeChange={(range) => {
-                  console.log("Selected range:", range);
                   if (range?.from) {
                     methods.setValue("startDate", range.from.toISOString(), {
                       shouldValidate: true,
