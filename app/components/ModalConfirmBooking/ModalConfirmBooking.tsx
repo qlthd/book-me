@@ -3,11 +3,14 @@
 import React, { useState } from "react";
 import { trpc } from "@/utils/trpc";
 import { useParams, useRouter } from "next/navigation";
-import { PageLayout } from "@components/PageLayout/PageLayout";
 import { LoaderCircle } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import { Modal } from "@components/Modal/Modal";
+import { ModalConfirmBookingProps } from "@components/ModalConfirmBooking/ModalConfirmBooking.types";
+import { TextInput } from "@components/TextInput/TextInput";
 
-const Page = () => {
+const ModalConfirmBooking = (props: ModalConfirmBookingProps) => {
+  const { onClose } = props;
   const params = useParams();
   const router = useRouter();
   const createBookingMutation = trpc.bookings.createBooking.useMutation();
@@ -81,59 +84,26 @@ const Page = () => {
   const errorClass = "text-red-500 text-sm w-full";
 
   return (
-    <Modal
-      onConfirm={handleSubmit}
-      onClose={() => router.back()}
-      className="flex flex-col gap-y-4"
-    >
-      <label
-        htmlFor="firstName"
-        className="w-full text-left mb-1 text-lg font-medium text-dark-gray"
-      >
-        First name
-      </label>
-      <input
-        id="firstName"
+    <Modal>
+      <h1 className="text-2xl">Confirm your booking</h1>
+      <TextInput
+        label="First name"
         type="text"
-        value={formData.firstName}
+        error={errors.firstName}
         onChange={handleInputChange}
-        className={`border ${errors.firstName ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
-        placeholder="Enter a value"
       />
-      {errors.firstName && <p className={errorClass}>{errors.firstName}</p>}
-
-      <label
-        htmlFor="lastName"
-        className="w-full text-left mb-1 text-lg font-medium text-dark-gray"
-      >
-        Last name
-      </label>
-      <input
-        id="lastName"
+      <TextInput
+        label="Last name"
         type="text"
-        value={formData.lastName}
+        error={errors.lastName}
         onChange={handleInputChange}
-        className={`border ${errors.lastName ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
-        placeholder="Enter a value"
       />
-      {errors.lastName && <p className={errorClass}>{errors.lastName}</p>}
-
-      <label
-        htmlFor="email"
-        className="w-full text-left mb-1 text-lg font-medium text-dark-gray"
-      >
-        Email
-      </label>
-      <input
-        id="email"
+      <TextInput
+        label="Email"
         type="email"
-        value={formData.email}
+        error={errors.email}
         onChange={handleInputChange}
-        className={`border ${errors.email ? "border-red-500 text-red-500" : "border-gray-300"} rounded-md p-2 w-full`}
-        placeholder="Enter a value"
       />
-      {errors.email && <p className={errorClass}>{errors.email}</p>}
-
       <div className="flex justify-start w-full gap-2">
         <button
           type="button"
@@ -150,6 +120,7 @@ const Page = () => {
         <button
           type="button"
           disabled={isSubmitting}
+          onClick={onClose}
           className={`bg-light-gray ${isSubmitting ? "text-gray-500" : "text-black"} rounded-md py-2 px-6 mt-4 ${!isSubmitting && "hover:bg-light-blue"}`}
         >
           Cancel
@@ -160,4 +131,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default ModalConfirmBooking;

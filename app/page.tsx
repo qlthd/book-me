@@ -8,6 +8,8 @@ import { useCalendarStore } from "@/app/stores/useCalendarStore";
 import { trpc } from "@/utils/trpc";
 import { formatDateToReadableString } from "@/app/helpers/dateHelper";
 import { Modal } from "@components/Modal/Modal";
+import { TextInput } from "@components/TextInput/TextInput";
+import ModalConfirmBooking from "@components/ModalConfirmBooking/ModalConfirmBooking";
 export default function Home() {
   const identity = "John Doe";
   const meetingName = "Acme Corp Meeting";
@@ -17,7 +19,7 @@ export default function Home() {
   const userId = "cmazqg2gn0000f0qclgj098ns";
 
   const { selectedDate } = useCalendarStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const formatDateYMD = (date: Date | null) => {
     if (!date) return "";
     return new Intl.DateTimeFormat("en-CA").format(date);
@@ -81,7 +83,9 @@ export default function Home() {
               </div>
             </div>
           )}
-        {isModalOpen && <Modal onConfirm={onModalConfirm} onClose={onClose} />}
+        {isModalOpen && (
+          <ModalConfirmBooking onClose={() => setIsModalOpen(false)} />
+        )}
       </div>
     </div>
   );

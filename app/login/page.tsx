@@ -10,16 +10,31 @@ import { useSession } from "next-auth/react";
 import { Modal } from "@components/Modal/Modal";
 import toast, { Toaster } from "react-hot-toast";
 import { FacebookPill } from "@components/FacebookPill/FacebookPill";
+import { TextInput } from "@components/TextInput/TextInput";
+import * as yup from "yup";
+
+export const ForgotPasswordSchema = yup.object().shape({
+  email: yup.string().email("Email invalide").required("Email requis"),
+});
+
+export type ForgotPasswordFormValues = {
+  email: string;
+};
 
 const Login = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({ email: false, password: false });
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session, status } = useSession();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<ForgotPasswordFormValues>({
+    resolver: yupResolver(ForgotPasswordSchema),
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -31,10 +46,6 @@ const Login = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-  };
-
   const onModalConfirm = () => {
     setIsModalOpen(false);
     toast.success("Email sent successfully!");
@@ -43,6 +54,8 @@ const Login = () => {
   const onClose = () => {
     setIsModalOpen(false);
   };
+
+  const onSubmit = () => {};
 
   return (
     <PageLayout
@@ -117,7 +130,41 @@ const Login = () => {
         <GooglePill />
         <FacebookPill />
 
-        {isModalOpen && <Modal onConfirm={onModalConfirm} onClose={onClose} />}
+        {isModalOpen && (
+          <Modal onConfirm={onModalConfirm} onClose={onClose}>
+            <div className="flex flex-col mb-4 gap-y-2">
+              <h1 className="w-full text-center mx-auto text-xl">
+                Forgot your password ?
+              </h1>
+              <p className="text-gray-500 text-sm text-center w-full">
+                Enter your email address below and we will send you a link to
+                reset your password.
+              </p>
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <TextInput
+                error={errors.email?.message}
+                {...register("email")}
+                label="Email"
+              />
+              <div className="flex gap-x-2">
+                <button
+                  type="submit"
+                  className="inline-flex mt-3 justify-center rounded-md bg-electric-blue px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-light-blue w-auto"
+                >
+                  Confirm
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="inline-flex mt-3 justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 w-auto"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </Modal>
+        )}
         <Toaster />
       </div>
     </PageLayout>
